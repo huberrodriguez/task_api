@@ -1,6 +1,7 @@
 from flask import Flask, request
 from app.config.config import Config
 from app.db import db
+import requests  # <-- Para consumir la API externa
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -60,6 +61,18 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
     return {"message": "Task deleted successfully"}
+
+# 🚀 Nuevo endpoint para consumir API externa
+@app.route("/external-tasks", methods=["GET"])
+def get_external_tasks():
+    try:
+        response = requests.get("https://jsonplaceholder.typicode.com/todos")
+        response.raise_for_status()
+        data = response.json()
+        # Solo devolver los primeros 5 para no saturar
+        return {"external_tasks": data[:5]}, 200
+    except requests.exceptions.RequestException as e:
+        return {"error": "No se pudo obtener la información externa", "details": str(e)}, 500
 
 if __name__ == "__main__":
     with app.app_context():
