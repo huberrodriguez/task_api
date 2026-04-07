@@ -1,12 +1,17 @@
 from flask import Flask, request
 from app.config.config import Config
 from app.db import db
-import requests  # <-- Para consumir la API externa
+import requests  # Para consumir la API externa
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Inicializa la base de datos
 db.init_app(app)
+
+# Inicializa JWT
+jwt = JWTManager(app)
 
 # Importa el modelo Task para crear la tabla
 from app.models.task_model import Task
@@ -16,14 +21,29 @@ from app.models.task_model import Task
 def home():
     return {"message": "Task API working"}
 
-# 🚀 Listar todas las tareas
+# 🌟 Login simple para obtener token JWT
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+    
+    # Usuario fijo para la prueba
+    if username == "admin" and password == "1234":
+        access_token = create_access_token(identity=username)
+        return {"access_token": access_token}, 200
+    else:
+        return {"error": "Usuario o contraseña incorrectos"}, 401
+
+# 🚀 Listar todas las tareas (público)
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
     tasks = Task.query.all()
     return {"tasks": [t.to_dict() for t in tasks]}
 
-# 🚀 Crear una nueva tarea
+# 🚀 Crear una nueva tarea (protegido)
 @app.route("/tasks", methods=["POST"])
+@jwt_required()
 def create_task():
     data = request.get_json()
     if not data or "title" not in data:
@@ -37,8 +57,9 @@ def create_task():
     db.session.commit()
     return new_task.to_dict(), 201
 
-# 🚀 Actualizar una tarea existente
+# 🚀 Actualizar una tarea existente (protegido)
 @app.route("/tasks/<int:task_id>", methods=["PUT"])
+@jwt_required()
 def update_task(task_id):
     task = Task.query.get(task_id)
     if not task:
@@ -51,8 +72,9 @@ def update_task(task_id):
     db.session.commit()
     return task.to_dict()
 
-# 🚀 Borrar una tarea
+# 🚀 Borrar una tarea (protegido)
 @app.route("/tasks/<int:task_id>", methods=["DELETE"])
+@jwt_required()
 def delete_task(task_id):
     task = Task.query.get(task_id)
     if not task:
