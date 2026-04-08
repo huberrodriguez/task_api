@@ -16,12 +16,12 @@ jwt = JWTManager(app)
 # Importa el modelo Task para crear la tabla
 from app.models.task_model import Task
 
-# 🌟 Ruta inicial
+#  Ruta inicial
 @app.route("/")
 def home():
     return {"message": "Task API working"}
 
-# 🌟 Login simple para obtener token JWT
+# Login simple para obtener token JWT
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -35,13 +35,13 @@ def login():
     else:
         return {"error": "Usuario o contraseña incorrectos"}, 401
 
-# 🚀 Listar todas las tareas (público)
+#  Listar todas las tareas (público)
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
     tasks = Task.query.all()
     return {"tasks": [t.to_dict() for t in tasks]}
 
-# 🚀 Crear una nueva tarea (protegido)
+#  Crear una nueva tarea (protegido)
 @app.route("/tasks", methods=["POST"])
 @jwt_required()
 def create_task():
@@ -57,7 +57,7 @@ def create_task():
     db.session.commit()
     return new_task.to_dict(), 201
 
-# 🚀 Actualizar una tarea existente (protegido)
+#  Actualizar una tarea existente (protegido)
 @app.route("/tasks/<int:task_id>", methods=["PUT"])
 @jwt_required()
 def update_task(task_id):
@@ -72,7 +72,7 @@ def update_task(task_id):
     db.session.commit()
     return task.to_dict()
 
-# 🚀 Borrar una tarea (protegido)
+# Borrar una tarea (protegido)
 @app.route("/tasks/<int:task_id>", methods=["DELETE"])
 @jwt_required()
 def delete_task(task_id):
@@ -84,7 +84,7 @@ def delete_task(task_id):
     db.session.commit()
     return {"message": "Task deleted successfully"}
 
-# 🚀 Nuevo endpoint para consumir API externa
+# Nuevo endpoint para consumir API externa
 @app.route("/external-tasks", methods=["GET"])
 def get_external_tasks():
     try:
