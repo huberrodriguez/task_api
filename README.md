@@ -44,12 +44,12 @@ python
 >>> db.create_all()
 Endpoints
 Método	Ruta	Descripción	Requiere Token
-GET	/tasks	Listar tareas	❌
-POST	/tasks	Crear tarea	✅
-PUT	/tasks/<id>	Actualizar tarea	✅
-DELETE	/tasks/<id>	Borrar tarea	✅
-GET	/external-tasks	Obtener tareas externas	❌
-POST	/login	Obtener token JWT	❌
+GET	/tasks	Listar tareas	
+POST	/tasks	Crear tarea	
+PUT	/tasks/<id>	Actualizar tarea	
+DELETE	/tasks/<id>	Borrar tarea	
+GET	/external-tasks	Obtener tareas externas	
+POST	/login	Obtener token JWT	
 Ejecución
 python main.py
 
