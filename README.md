@@ -1,21 +1,16 @@
-# Task API - Prueba Técnica
-
-## Descripción
+Task API - Prueba Técnica
+Descripción
 API REST para gestionar tareas simples. Permite operaciones CRUD y consumo de API externa.
 
-## Tecnologías
-- Python 3
-- Flask
-- Flask SQLAlchemy
-- Flask JWT Extended
-- PostgreSQL
-- Requests
-
-## Instalación
-
-1. Clonar el repositorio:
-
-```bash
+Tecnologías
+Python 3
+Flask
+Flask SQLAlchemy
+Flask JWT Extended
+PostgreSQL
+Requests
+Instalación
+Clonar el repositorio:
 git clone https://github.com/huberrodriguez/task_api.git
 cd task_api
 Crear entorno virtual:
