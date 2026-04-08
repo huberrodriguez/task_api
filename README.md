@@ -23,21 +23,35 @@ Configuración
 
 Variables importantes:
 
-SECRET_KEY - Clave secreta de Flask
-SQLALCHEMY_DATABASE_URI - Conexión a PostgreSQL
-JWT_SECRET_KEY - Clave para JWT
+class Config:
+    SECRET_KEY = "mi_clave_secreta"
+    SQLALCHEMY_DATABASE_URI =     "postgresql://postgres:159357@localhost:5432/task_db"
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    JWT_SECRET_KEY = "mi_jwt_secreto"
 
 Archivo: app/config/config.py
 
 Base de datos
 
-Crear la base de datos task_db en PostgreSQL.
+Crear la base de datos task_db en PostgreSQL.python main.py
+
+Esto ejecuta db.create_all() y crea la tabla tasks.
+
 Luego correr migraciones:
 
 python
 >>> from main import db
 >>> db.create_all()
 Endpoints
+Login
+POST /login
+JSON
+{
+  "username": "admin",
+  "password": "1234"
+}
+Retorna token JWT
+
 Método	Ruta	Descripción	Requiere Token
 GET	/tasks	Listar tareas	
 POST	/tasks	Crear tarea	
@@ -47,6 +61,7 @@ GET	/external-tasks	Obtener tareas externas
 POST	/login	Obtener token JWT	
 Ejecución
 python main.py
+
 
 Servidor por defecto: http://127.0.0.1:5000
 
@@ -58,4 +73,7 @@ python test_api.py
 Extras
 Código organizado en módulos (models, config, db)
 Uso de JWT para endpoints protegidos
-Integración con API externa JSONPlaceholder
+Integración con API externa JSONPlaceholderAutor
+
+Huber Rodriguez
+Repositorio: https://github.com/huberrodriguez/task_api
